@@ -28,6 +28,7 @@ var Animu = "203056139317936129"
 var Coding = "167080257831174144"
 var Admin = "160867765815607296"
 var serverID = "160866222194425856";
+var voiceID = "";
 
 //Random Variables
 var newTime = "";
@@ -109,8 +110,9 @@ bot.on('message', function(user, userID, channelID, message, rawEvent) {
       });
     }
 	
-	if (messageHas("nia", message) && messageHas("sing", message) && sing == false) {		
-		bot.joinVoiceChannel(bot.servers[serverID].members[userID].voice_channel_id);
+	if (messageHas("nia", message) && messageHas("sing", message) && sing == false) {
+		voiceID = bot.servers[serverID].members[userID].voice_channel_id;
+		bot.joinVoiceChannel(voiceID);
 		bot.sendMessage({
 			to: channelID,
 			message:"What would you like me to sing?"
@@ -120,13 +122,13 @@ bot.on('message', function(user, userID, channelID, message, rawEvent) {
 		
 	if (messageHas("dango", message) && sing == true){
 		file = "dango.mp3";
-		bot.getAudioContext({channel: bot.servers[serverID].members[userID].voice_channel_id, stereo: true}, handleStream);
+		bot.getAudioContext({channel: voiceID, stereo: true}, handleStream);
 		sing = false;
 		console.log("Now Playing 'Dango Daikazoku'")
 	}	
 	
-	if (messageHas("test", message)){
-		console.log("woo");
+	if (messageHas("nevermind", message) && sing == true){
+		bot.leaveVoiceChannel(voiceID);
 	}
 });
 
@@ -144,8 +146,7 @@ function handleStream(stream) {
 	});
 			
 	ffmpeg.stdout.once('end', function() {
-		bot.disconnect();
-		bot.connect();
+		bot.leaveVoiceChannel(voiceID);
 	});
 }
 
