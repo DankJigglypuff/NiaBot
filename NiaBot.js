@@ -1,5 +1,5 @@
 //Check if plugins exist
-
+//testing
 var DiscordClient = require('discord.io');
 var Lame = require('lame');
 var fs = require('fs');
